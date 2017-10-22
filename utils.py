@@ -48,8 +48,8 @@ def get_news_elements(categories):
     return elements
 
 def handle_message(message):
-    if data['object'] == 'page':
-        for entry in data['entry']:
+    if message['object'] == 'page':
+        for entry in message['entry']:
             for messaging_event in entry['messaging']:
 
                 #IDs
