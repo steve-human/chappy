@@ -33,7 +33,7 @@ def get_news_elements(categories):
     for item in news_items:
         element = {
             'title': item['title'],
-            'button': [{
+            'buttons': [{
                 'type': 'web_url',
                 'title': 'Read more',
                 'url': item['link']
