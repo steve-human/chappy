@@ -47,6 +47,7 @@ def webhook():
                     elif 'greetings' in categories and categories['greetings'] == 'true':
                         bot.send_text_message(sender_id, "Hey, what's new?")
                     else:
+                        bot.send_text_message(sender_id, "Sure do! Here you go...")
                         elements = get_news_elements(categories)
                         bot.send_generic_message(sender_id, elements)
 
