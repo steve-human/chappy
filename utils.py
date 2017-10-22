@@ -31,8 +31,8 @@ def get_news_elements(categories):
     elements = []
 
     for item in news_items:
-        element {
-            'title': item['title']
+        element = {
+            'title': item['title'],
             'button': [{
                 'type': 'web_url',
                 'title': 'Read more',
@@ -43,6 +43,3 @@ def get_news_elements(categories):
         elements.append(element)
 
     return elements
-
-
-print(get_news_elements(wit_response("I want sports news from Canada")))
