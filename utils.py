@@ -6,12 +6,13 @@ from pymessenger import Bot
 WIT_ACCESS_TOKEN = os.getenv('WIT_ACCESS_TOKEN', 'wit-access-token')
 PAGE_ACCESS_TOKEN = os.getenv('FB_PAGE_ACCESS_TOKEN', 'fb-page-access-token')
 
-client = Wit(access_token = WIT_ACCESS_TOKEN)
+client = Wit(access_token=WIT_ACCESS_TOKEN)
 bot = Bot(PAGE_ACCESS_TOKEN)
+
 
 def wit_response(message_text):
     response = client.message(message_text)
-    categories = {'newstype':None, 'location':None}
+    categories = {'newstype': None, 'location': None}
 
     entities = list(response['entities'])
     for entity in entities:
@@ -19,14 +20,15 @@ def wit_response(message_text):
 
     return categories
 
+
 def get_news_elements(categories):
     news_client = gnewsclient()
     news_client.query = ''
 
-    if categories['newstype'] != None:
+    if categories['newstype'] is not None:
         news_client.query += categories['newstype'] + ' '
 
-    if categories['location'] != None:
+    if categories['location'] is not None:
         news_client.query += categories['location']
 
     news_items = news_client.get_news()
@@ -47,14 +49,14 @@ def get_news_elements(categories):
 
     return elements
 
+
 def handle_message(message):
     if message['object'] == 'page':
         for entry in message['entry']:
             for messaging_event in entry['messaging']:
 
-                #IDs
+                # IDs
                 sender_id = messaging_event['sender']['id']
-                recipient_id = messaging_event['recipient']['id']
 
                 if messaging_event.get('message'):
                     # Extracting text message

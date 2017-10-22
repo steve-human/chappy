@@ -1,10 +1,11 @@
 import os, sys
 from flask import Flask, request
-from utils import wit_response, get_news_elements, handle_message
+from utils import handle_message
 
 VERIFY_TOKEN = os.getenv('VERIFY_TOKEN', 'verify-token')
 
 app = Flask(__name__)
+
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -25,10 +26,11 @@ def webhook():
 
     return "ok", 200
 
+
 def log(message):
     print(message)
     sys.stdout.flush()
 
 
 if __name__ == "__main__":
-    app.run(debug = True, port = 8080)
+    app.run(debug=True, port = 8080)
