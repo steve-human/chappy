@@ -42,9 +42,9 @@ def webhook():
 
                     categories = wit_response(messaging_text)
 
-                    if categories['thanks']:
+                    if 'thanks' in categories and categories['thanks'] == 'true':
                         bot.send_text_message(sender_id, "You're welcome!")
-                    elif categories['greetings']:
+                    elif 'greetings' categories and categories['greetings'] == 'true':
                         bot.send_text_message(sender_id, "Hey, what's new?")
                     else:
                         elements = get_news_elements(categories)
