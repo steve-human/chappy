@@ -1,14 +1,10 @@
 import os, sys
 from flask import Flask, request
-from utils import wit_response, get_news_elements
-from pymessenger import Bot
+from utils import wit_response, get_news_elements, handle_message
 
-app = Flask(__name__)
-
-PAGE_ACCESS_TOKEN = os.getenv('FB_PAGE_ACCESS_TOKEN', 'fb-page-access-token')
 VERIFY_TOKEN = os.getenv('VERIFY_TOKEN', 'verify-token')
 
-bot = Bot(PAGE_ACCESS_TOKEN)
+app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -22,34 +18,10 @@ def verify():
 
 @app.route('/', methods=['POST'])
 def webhook():
-    data = request.get_json()
-    log(data)
+    message_event = request.get_json()
+    log(message_event)
 
-    if data['object'] == 'page':
-        for entry in data['entry']:
-            for messaging_event in entry['messaging']:
-
-                #IDs
-                sender_id = messaging_event['sender']['id']
-                recipient_id = messaging_event['recipient']['id']
-
-                if messaging_event.get('message'):
-                    # Extracting text message
-                    if 'text' in messaging_event['message']:
-                        messaging_text = messaging_event['message']['text']
-                    else:
-                        messaging_text = 'no text'
-
-                    categories = wit_response(messaging_text)
-
-                    if 'thanks' in categories and categories['thanks'] == 'true':
-                        bot.send_text_message(sender_id, "You're welcome!")
-                    elif 'greetings' in categories and categories['greetings'] == 'true':
-                        bot.send_text_message(sender_id, "Hey, what's new?")
-                    else:
-                        bot.send_text_message(sender_id, "Sure do! Here you go...")
-                        elements = get_news_elements(categories)
-                        bot.send_generic_message(sender_id, elements)
+    handle_message(message_event)
 
     return "ok", 200
 

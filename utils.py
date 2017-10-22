@@ -1,10 +1,13 @@
 import os
 from wit import Wit
 from gnewsclient import gnewsclient
+from pymessenger import Bot
 
 WIT_ACCESS_TOKEN = os.getenv('WIT_ACCESS_TOKEN', 'wit-access-token')
+PAGE_ACCESS_TOKEN = os.getenv('FB_PAGE_ACCESS_TOKEN', 'fb-page-access-token')
 
 client = Wit(access_token = WIT_ACCESS_TOKEN)
+bot = Bot(PAGE_ACCESS_TOKEN)
 
 def wit_response(message_text):
     response = client.message(message_text)
@@ -43,3 +46,30 @@ def get_news_elements(categories):
         elements.append(element)
 
     return elements
+
+def handle_message(message):
+    if data['object'] == 'page':
+        for entry in data['entry']:
+            for messaging_event in entry['messaging']:
+
+                #IDs
+                sender_id = messaging_event['sender']['id']
+                recipient_id = messaging_event['recipient']['id']
+
+                if messaging_event.get('message'):
+                    # Extracting text message
+                    if 'text' in messaging_event['message']:
+                        messaging_text = messaging_event['message']['text']
+                    else:
+                        messaging_text = 'no text'
+
+                    categories = wit_response(messaging_text)
+
+                    if 'thanks' in categories and categories['thanks'] == 'true':
+                        bot.send_text_message(sender_id, "You're welcome!")
+                    elif 'greetings' in categories and categories['greetings'] == 'true':
+                        bot.send_text_message(sender_id, "Hey, what's new?")
+                    else:
+                        bot.send_text_message(sender_id, "Sure do! Here you go...")
+                        elements = get_news_elements(categories)
+                        bot.send_generic_message(sender_id, elements)
