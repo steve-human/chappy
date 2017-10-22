@@ -43,3 +43,10 @@ def get_news_elements(categories):
         elements.append(element)
 
     return elements
+
+resp = wit_response("thanks")
+
+if resp['thanks']:
+    print('Your welcome')
+else:
+    print('How rude!')

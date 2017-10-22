@@ -41,9 +41,14 @@ def webhook():
                         messaging_text = 'no text'
 
                     categories = wit_response(messaging_text)
-                    elements = get_news_elements(categories)
 
-                    bot.send_generic_message(sender_id, elements)
+                    if categories['thanks']:
+                        bont.send_text_message(sender_id, "You're welcome!")
+                    elif categories['greetings']:
+                        bont.send_text_message(sender_id, "Hey, what's new?")
+                    else:
+                        elements = get_news_elements(categories)
+                        bot.send_generic_message(sender_id, elements)
 
     return "ok", 200
 
