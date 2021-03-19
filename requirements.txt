@@ -9,7 +9,7 @@ gunicorn==19.7.1
 html5lib==0.999999999
 idna==2.6
 itsdangerous==0.24
-Jinja2==2.9.6
+Jinja2==2.11.3
 MarkupSafe==1.0
 prompt-toolkit==1.0.15
 pymessenger==0.0.7.0
